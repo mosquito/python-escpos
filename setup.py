@@ -3,10 +3,10 @@
 from distutils.core import setup
 
 setup(
-    name='escpos',
-    version='2.7',
+    name='python-escpos',
+    version='1.0.1',
     url='http://code.google.com/p/python-escpos',
-    download_url='http://python-escpos.googlecode.com/files/python-escpos-1.0.zip',
+    download_url='https://github.com/mosquito/python-escpos/archive/master.zip',
     description='Python library to manipulate ESC/POS Printers',
     license='GNU GPL v3',
     long_description=open('README').read(),
@@ -17,13 +17,8 @@ setup(
         'escpos',
     ],
     package_data={'': ['COPYING']},
-    classifiers=[
-        'Development Status :: 1 - Alpha',
-        'License :: OSI Approved :: GNU GPL v3',
-        'Operating System :: GNU/Linux',
-        'Intended Audience :: Developers',
-        'Programming Language :: Python',
-        'Topic :: System :: Pheripherals',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+    install_requires=[
+        'pyusb',
+        'Pillow>=2.0'
     ],
 )
