@@ -3,8 +3,8 @@ ESCPOS
 
 Python library to manipulate ESC/POS Printers.
 
-------------------------------------------------------------------
 1. Dependencies
+---------------
 
 In order to start getting access to your printer, you must ensure
 you have previously installed the following python modules:
@@ -12,18 +12,18 @@ you have previously installed the following python modules:
   * pyusb (python-usb)
   * PIL (Python Image Library)
 
-------------------------------------------------------------------
 2. Description
+--------------
 
 Python ESC/POS is a library which lets the user have access to all
 those printers handled by ESC/POS commands, as defined by Epson,
 from a Python application.
 
-The standard usage is send raw text to the printer, but in also 
+The standard usage is send raw text to the printer, but in also
 helps the user to enhance the experience with those printers by
 facilitating the bar code printing in many different standards,
 as well as manipulating images so they can be printed as brand
-logo or any other usage images migh have. 
+logo or any other usage images migh have.
 
 Text can be aligned/justified and fonts can be changed by size,
 type and weight.
@@ -32,8 +32,8 @@ Also, this module handles some hardware functionalities like, cut
 paper, carrier return, printer reset and others concerned to the
 carriage alignment.
 
-------------------------------------------------------------------
 3. Define your printer
+----------------------
 
 Before start create your Python ESC/POS printer instance, you must
 see at your system for the printer parameters. This is done with
@@ -62,8 +62,9 @@ By default the "Interface" number is "0" and the "Output Endpoint"
 address is "0x82",  if you have other values then you can define
 with your instance.
 
-------------------------------------------------------------------
+
 4. Define your instance
+-----------------------
 
 The following example shows how to initialize the Epson TM-TI88IV
 *** NOTE: Always finish the sequence with Epson.cut() otherwise
@@ -79,11 +80,11 @@ The following example shows how to initialize the Epson TM-TI88IV
   Epson.barcode('1324354657687','EAN13',64,2,'','')
   Epson.cut()
 
-------------------------------------------------------------------
 5. Links
+--------
 
 Please visit project homepage at:
 http://repo.bashlinux.com/projects/escpos.html
 
-Manuel F Martinez <manpaz@bashlinux.com>
-
+* Manuel F Martinez <manpaz@bashlinux.com>
+* Dmitry Orlov <me@mosquito.su>

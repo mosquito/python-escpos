@@ -117,7 +117,7 @@ class Escpos:
         """ Print QR Code for the provided string """
         qr_args = dict(
             version=4,
-            box_size=5,
+            box_size=4,
             border=1,
             error_correction=qrcode.ERROR_CORRECT_M
         )

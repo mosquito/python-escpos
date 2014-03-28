@@ -7,6 +7,10 @@ On CLi you must run:
 # python setup.py build
 # sudo python setup.py install
 
+or from PYPI:
+
+# pip install python-escpos
+
 On Linux, ensure you belongs to the proper group so you can have access to the printer.
 This can be done, by adding yourself to 'dialout' group, this might require to re-login
 so the changes make effect.

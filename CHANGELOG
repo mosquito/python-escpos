@@ -1,5 +1,11 @@
 CHANGELOG
 
+* 2014-03-28 - Version 1.0.3
+- Add codepage settings
+- Add close method
+- Register to PYPI as python-escpos
+- Change PIL to Pillow
+
 * 2012-11-15 - Version 1.0
 - Issue #2: Added ethernet support
 - Issue #3: Added compatibility with libusb-1.0.1
