@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='python-escpos',
-    version='1.0.1',
+    version='1.0.2',
     url='http://code.google.com/p/python-escpos',
     download_url='https://github.com/mosquito/python-escpos/archive/master.zip',
     description='Python library to manipulate ESC/POS Printers',
@@ -19,6 +19,7 @@ setup(
     package_data={'': ['COPYING']},
     install_requires=[
         'pyusb',
-        'Pillow>=2.0'
+        'Pillow>=2.0',
+        'qrcode>=4.0',
     ],
 )

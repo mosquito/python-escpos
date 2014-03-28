@@ -39,7 +39,7 @@ class Escpos:
         i = 0
         cont = 0
         buffer = ""
-       
+
         self._raw(S_RASTER_N)
         buffer = "%02X%02X%02X%02X" % (((size[0]/size[1])/8), 0, size[1], 0)
         self._raw(buffer.decode('hex'))
@@ -97,7 +97,7 @@ class Escpos:
                         break
                     elif im_color > (255 * 3 / pattern_len * pattern_len) and im_color <= (255 * 3):
                         pix_line += im_pattern[-1]
-                        break 
+                        break
             pix_line += im_right
             img_size[0] += im_border[1]
 
@@ -149,9 +149,9 @@ class Escpos:
             self._raw(BARCODE_TXT_BTH)
         elif pos.upper() == "ABOVE":
             self._raw(BARCODE_TXT_ABV)
-        else:  # DEFAULT POSITION: BELOW 
+        else:  # DEFAULT POSITION: BELOW
             self._raw(BARCODE_TXT_BLW)
-        # Type 
+        # Type
         if bc.upper() == "UPC-A":
             self._raw(BARCODE_UPC_A)
         elif bc.upper() == "UPC-E":
@@ -174,17 +174,27 @@ class Escpos:
         else:
             raise exception.BarcodeCodeError()
 
-        
-    def text(self, txt):
+
+    def text(self, txt, codepage=None):
         """ Print alpha-numeric text """
         if txt:
-            self._raw(txt)
+            if self._codepage:
+                self._raw(unicode(txt).encode(self._codepage))
+            else:
+                self._raw(txt)
         else:
             raise TextError()
 
 
-    def set(self, align='left', font='a', type='normal', width=1, height=1):
+    def set(self, align='left', codepage=None, font='a', type='normal', width=1, height=1, inverted=False):
         """ Set text properties """
+
+        # Inverted font
+        if inverted:
+            self._raw(WHITE_ON_BLACK)
+        else:
+            self._raw(BLACK_ON_WHITE)
+
         # Width
         if height != 2 and width != 2: # DEFAULT SIZE: NORMAL
             self._raw(TXT_NORMAL)
@@ -220,6 +230,8 @@ class Escpos:
         # Font
         if font.upper() == "B":
             self._raw(TXT_FONT_B)
+        elif font.upper() == "C":
+            self._raw(TXT_FONT_C)
         else:  # DEFAULT FONT: A
             self._raw(TXT_FONT_A)
         # Align
@@ -230,6 +242,10 @@ class Escpos:
         elif align.upper() == "LEFT":
             self._raw(TXT_ALIGN_LT)
 
+        # Codepage
+        self._codepage = codepage
+        if codepage:
+            self._raw(PAGE_CP_SET_COMMAND + chr(PAGE_CP_CODE[codepage]))
 
     def cut(self, mode=''):
         """ Cut paper """
@@ -262,6 +278,8 @@ class Escpos:
             self._raw(HW_RESET)
         else: # DEFAULT: DOES NOTHING
             pass
+
+        self._codepage = None
 
 
     def control(self, ctl):
