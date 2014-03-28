@@ -20,6 +20,7 @@ from exceptions import *
 class Escpos:
     """ ESC/POS Printer object """
     device    = None
+    _codepage  = None
 
 
     def _check_image_size(self, size):
@@ -112,9 +113,18 @@ class Escpos:
         self._convert_image(im)
 
 
-    def qr(self,text):
+    def qr(self, text, *args, **kwargs):
         """ Print QR Code for the provided string """
-        qr_code = qrcode.QRCode(version=4, box_size=4, border=1)
+        qr_args = dict(
+            version=4,
+            box_size=5,
+            border=1,
+            error_correction=qrcode.ERROR_CORRECT_M
+        )
+
+        qr_args.update(kwargs)
+        qr_code = qrcode.QRCode(**qr_args)
+
         qr_code.add_data(text)
         qr_code.make(fit=True)
         qr_img = qr_code.make_image()
@@ -186,14 +196,29 @@ class Escpos:
             raise TextError()
 
 
-    def set(self, align='left', codepage=None, font='a', type='normal', width=1, height=1, inverted=False):
+    def set(
+        self,
+        align='left',
+        codepage=None,
+        font='a',
+        type='normal',
+        width=1,
+        height=1,
+        inverted=False,
+        bold=False):
         """ Set text properties """
+
+        # More bolder font
+        if inverted:
+            self._raw(EMPHASIZED + chr(1))
+        else:
+            self._raw(EMPHASIZED + chr(0))
 
         # Inverted font
         if inverted:
-            self._raw(WHITE_ON_BLACK)
+            self._raw(INVERTED + chr(1))
         else:
-            self._raw(BLACK_ON_WHITE)
+            self._raw(INVERTED + chr(0))
 
         # Width
         if height != 2 and width != 2: # DEFAULT SIZE: NORMAL
@@ -294,3 +319,7 @@ class Escpos:
             self._raw(CTL_HT)
         elif ctl.upper() == "VT":
             self._raw(CTL_VT)
+
+    def close(self):
+        self._raw(RESET)
+        self.__del__()

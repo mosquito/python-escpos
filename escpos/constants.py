@@ -54,8 +54,9 @@ S_RASTER_2W     = '\x1d\x76\x30\x01' # Set raster image double width
 S_RASTER_2H     = '\x1d\x76\x30\x02' # Set raster image double height
 S_RASTER_Q      = '\x1d\x76\x30\x03' # Set raster image quadruple
 
-BLACK_ON_WHITE  = '\x1d\x42\x00'
-WHITE_ON_BLACK  = '\x1d\x42\x01'
+INVERTED        = '\x1d\x42'
+EMPHASIZED      = '\x1b\x45'
+RESET           = '\x1b\x40'
 
 PAGE_CP_SET_COMMAND = '\x1b\x74'
 PAGE_CP_CODE = {
