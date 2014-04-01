@@ -17,22 +17,7 @@ CD_KICK_5 = '\x1b\x70\x01'     # Sends a pulse to pin 5 []
 PAPER_FULL_CUT  = '\x1d\x56\x00' # Full cut paper
 PAPER_PART_CUT  = '\x1d\x56\x01' # Partial cut paper
 # Text format
-TXT_NORMAL      = '\x1b\x21\x00' # Normal text
-TXT_2HEIGHT     = '\x1b\x21\x10' # Double height text
-TXT_2WIDTH      = '\x1b\x21\x20' # Double width text
-TXT_4SQUARE     = '\x1b\x21\x30' # Quad area text
-TXT_UNDERL_OFF  = '\x1b\x2d\x00' # Underline font OFF
-TXT_UNDERL_ON   = '\x1b\x2d\x01' # Underline font 1-dot ON
-TXT_UNDERL2_ON  = '\x1b\x2d\x02' # Underline font 2-dot ON
-TXT_BOLD_OFF    = '\x1b\x45\x00' # Bold font OFF
-TXT_BOLD_ON     = '\x1b\x45\x01' # Bold font ON
-TXT_FONT_A      = '\x1b\x4d\x00' # Font type A
-TXT_FONT_B      = '\x1b\x4d\x01' # Font type B
-TXT_FONT_C      = '\x1b\x4d\x02' # Font type C
-TXT_ALIGN_LT    = '\x1b\x61\x00' # Left justification
-TXT_ALIGN_CT    = '\x1b\x61\x01' # Centering
-TXT_ALIGN_RT    = '\x1b\x61\x02' # Right justification
-# Barcode format
+
 BARCODE_TXT_OFF = '\x1d\x48\x00' # HRI barcode chars OFF
 BARCODE_TXT_ABV = '\x1d\x48\x01' # HRI barcode chars above
 BARCODE_TXT_BLW = '\x1d\x48\x02' # HRI barcode chars below
@@ -48,15 +33,50 @@ BARCODE_EAN8    = '\x1d\x6b\x03' # Barcode type EAN8
 BARCODE_CODE39  = '\x1d\x6b\x04' # Barcode type CODE39
 BARCODE_ITF     = '\x1d\x6b\x05' # Barcode type ITF
 BARCODE_NW7     = '\x1d\x6b\x06' # Barcode type NW7
+
 # Image format
 S_RASTER_N      = '\x1d\x76\x30\x00' # Set raster image normal size
 S_RASTER_2W     = '\x1d\x76\x30\x01' # Set raster image double width
 S_RASTER_2H     = '\x1d\x76\x30\x02' # Set raster image double height
 S_RASTER_Q      = '\x1d\x76\x30\x03' # Set raster image quadruple
 
-INVERTED        = '\x1d\x42'
-EMPHASIZED      = '\x1b\x45'
 RESET           = '\x1b\x40'
+
+TEXT_STYLE = {
+    'bold': {
+        0: '\x1b\x45\x00',          # Bold font OFF
+        1: '\x1b\x45\x01',          # Bold font ON
+    },
+    'underline': {
+        None: '\x1b\x2d\x00',       # Underline font OFF
+        1: '\x1b\x2d\x01',          # Underline font 1-dot ON
+        2: '\x1b\x2d\x02',          # Underline font 2-dot ON
+    },
+    'size': {
+        'normal': '\x1b\x21\x00',   # Normal text
+        '2h': '\x1b\x21\x10',       # Double height text
+        '2w': '\x1b\x21\x20',       # Double width text
+        '2x': '\x1b\x21\x30',     # Quad area text
+    },
+    'font': {
+        'a': '\x1b\x4d\x00',        # Font type A
+        'b': '\x1b\x4d\x01',        # Font type B
+        'c': '\x1b\x4d\x02',        # Font type C (may not support)
+    },
+    'align': {
+        'left': '\x1b\x61\x00',     # Left justification
+        'right': '\x1b\x61\x02',    # Right justification
+        'center': '\x1b\x61\x01',   # Centering
+    },
+    'inverted': {
+        False: '\x1d\x42\x00',      # Inverted mode ON
+        True: '\x1d\x42\x01',       # Inverted mode OFF
+    },
+    'color': {
+        1: '\x1b\x72\x00',          # Select 1st printing color
+        2: '\x1b\x72\x00',          # Select 2nd printing color
+    }
+}
 
 PAGE_CP_SET_COMMAND = '\x1b\x74'
 PAGE_CP_CODE = {

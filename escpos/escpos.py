@@ -19,14 +19,33 @@ from exceptions import *
 
 class EscposIO(object):
     ''' ESC/POS Printer IO object'''
-    def __init__(self, printer, autocut=True, **kwargs):
+    def __init__(self, printer, autocut=True):
         self.printer = printer
-        self.params = kwargs
+        self.params = {}
         self.autocut = autocut
 
 
     def set(self, **kwargs):
-        self.kwargs.update(kwargs)
+        """
+        :type bold:         bool
+        :param bold:        set bold font
+        :type underline:    [None, 1, 2]
+        :param underline:   underline text
+        :type size:         ['normal', '2w', '2h' or '2x']
+        :param size:        Text size
+        :type font:         ['a', 'b', 'c']
+        :param font:        Font type
+        :type align:        ['left', 'center', 'right']
+        :param align:       Text position
+        :type inverted:     boolean
+        :param inverted:    White on black text
+        :type color:        [1, 2]
+        :param color:       Text color
+        :rtype:             NoneType
+        :returns:            None
+        """
+
+        self.params.update(kwargs)
 
 
     def writelines(self, text, **kwargs):
@@ -47,11 +66,13 @@ class EscposIO(object):
             else:
                 self.printer.text("{0}\n".format(line))
 
+
     def close(self):
         if self.autocut:
             self.printer.cut()
 
-    def __enter__(self, **kwrags):
+
+    def __enter__(self, **kwargs):
         return self
 
 
@@ -229,90 +250,60 @@ class Escpos(object):
             raise exception.BarcodeCodeError()
 
 
-    def text(self, txt, codepage=None):
+    def text(self, text):
         """ Print alpha-numeric text """
-        if txt:
+        if text:
             if self._codepage:
-                self._raw(unicode(txt).encode(self._codepage))
+                self._raw(unicode(text).encode(self._codepage))
             else:
-                self._raw(txt)
+                self._raw(text)
         else:
             raise TextError()
 
 
-    def set(self, align='left', codepage=None, font='a', type='normal',
-        width=1, height=1, inverted=False, bold=False):
-        """ Set text properties """
+    def set(self, align='left', codepage=None, **kwargs):
+        """
+        :type bold:         bool
+        :param bold:        set bold font
+        :type underline:    [None, 1, 2]
+        :param underline:   underline text
+        :type size:         ['normal', '2w', '2h' or '2x']
+        :param size:        Text size
+        :type font:         ['a', 'b', 'c']
+        :param font:        Font type
+        :type align:        ['left', 'center', 'right']
+        :param align:       Text position
+        :type inverted:     boolean
+        :param inverted:    White on black text
+        :type color:        [1, 2]
+        :param color:       Text color
+        :rtype:             NoneType
+        :returns:            None
+        """
 
-        # More bolder font
-        if inverted:
-            self._raw(EMPHASIZED + chr(1))
-        else:
-            self._raw(EMPHASIZED + chr(0))
+        for key, value in TEXT_STYLE.iteritems():
+            if kwargs.has_key(key):
+                cur = kwargs[key]
+                if isinstance(cur, str) or isinstance(cur, unicode):
+                    cur = cur.lower()
 
-        # Inverted font
-        if inverted:
-            self._raw(INVERTED + chr(1))
-        else:
-            self._raw(INVERTED + chr(0))
-
-        # Width
-        if height != 2 and width != 2: # DEFAULT SIZE: NORMAL
-            self._raw(TXT_NORMAL)
-
-        if height == 2:
-            self._raw(TXT_2HEIGHT)
-        if width == 2:
-            self._raw(TXT_2WIDTH)
-
-        if height == 2 and width == 2:
-            self._raw(TXT_4SQUARE)
-
-        # Type
-        if type.upper() == "B":
-            self._raw(TXT_BOLD_ON)
-            self._raw(TXT_UNDERL_OFF)
-        elif type.upper() == "U":
-            self._raw(TXT_BOLD_OFF)
-            self._raw(TXT_UNDERL_ON)
-        elif type.upper() == "U2":
-            self._raw(TXT_BOLD_OFF)
-            self._raw(TXT_UNDERL2_ON)
-            self._raw(TXT_ITALIC_OFF)
-        elif type.upper() == "BU":
-            self._raw(TXT_BOLD_ON)
-            self._raw(TXT_UNDERL_ON)
-        elif type.upper() == "BU2":
-            self._raw(TXT_BOLD_ON)
-            self._raw(TXT_UNDERL2_ON)
-        elif type.upper == "NORMAL":
-            self._raw(TXT_BOLD_OFF)
-            self._raw(TXT_UNDERL_OFF)
-        # Font
-        if font.upper() == "B":
-            self._raw(TXT_FONT_B)
-        elif font.upper() == "C":
-            self._raw(TXT_FONT_C)
-        else:  # DEFAULT FONT: A
-            self._raw(TXT_FONT_A)
-        # Align
-        if align.upper() == "CENTER":
-            self._raw(TXT_ALIGN_CT)
-        elif align.upper() == "RIGHT":
-            self._raw(TXT_ALIGN_RT)
-        elif align.upper() == "LEFT":
-            self._raw(TXT_ALIGN_LT)
+                if value.has_key(cur):
+                    self._raw(value[cur])
+                else:
+                    raise AttributeError(
+                        'Attribute {0} is wrong.'.format(cur)
+                    )
 
         # Codepage
         self._codepage = codepage
         if codepage:
             self._raw(PAGE_CP_SET_COMMAND + chr(PAGE_CP_CODE[codepage]))
 
-    def cut(self, mode=''):
+    def cut(self, mode='', postfix="\n\n\n\n\n\n"):
         """ Cut paper """
         # Fix the size between last line and cut
         # TODO: handle this with a line feed
-        self._raw("\n\n\n\n\n\n")
+        self._raw(postfix)
         if mode.upper() == "PART":
             self._raw(PAPER_PART_CUT)
         else: # DEFAULT MODE: FULL CUT
