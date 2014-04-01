@@ -17,10 +17,54 @@ import time
 from constants import *
 from exceptions import *
 
-class Escpos:
+class EscposIO(object):
+    ''' ESC/POS Printer IO object'''
+    def __init__(self, printer, autocut=True, **kwargs):
+        self.printer = printer
+        self.params = kwargs
+        self.autocut = autocut
+
+
+    def set(self, **kwargs):
+        self.kwargs.update(kwargs)
+
+
+    def writelines(self, text, **kwargs):
+        params = dict(self.params)
+        params.update(kwargs)
+
+        if isinstance(text, unicode) or isinstance(text, str):
+            lines = text.split('\n')
+        elif isinstance(text, list) or isinstance(text, tuple):
+            lines = text
+        else:
+            lines = ["{0}".format(text),]
+
+        for line in lines:
+            self.printer.set(**params)
+            if isinstance(text, unicode):
+                self.printer.text(u"{0}\n".format(line))
+            else:
+                self.printer.text("{0}\n".format(line))
+
+    def close(self):
+        if self.autocut:
+            self.printer.cut()
+
+    def __enter__(self, **kwrags):
+        return self
+
+
+    def __exit__(self, type, value, traceback):
+        self.close()
+
+
+
+class Escpos(object):
     """ ESC/POS Printer object """
     device    = None
     _codepage  = None
+    stored_args = {}
 
 
     def _check_image_size(self, size):
@@ -196,16 +240,8 @@ class Escpos:
             raise TextError()
 
 
-    def set(
-        self,
-        align='left',
-        codepage=None,
-        font='a',
-        type='normal',
-        width=1,
-        height=1,
-        inverted=False,
-        bold=False):
+    def set(self, align='left', codepage=None, font='a', type='normal',
+        width=1, height=1, inverted=False, bold=False):
         """ Set text properties """
 
         # More bolder font
