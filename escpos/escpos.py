@@ -19,10 +19,11 @@ from exceptions import *
 
 class EscposIO(object):
     ''' ESC/POS Printer IO object'''
-    def __init__(self, printer, autocut=True):
+    def __init__(self, printer, autocut=True, autoclose=True):
         self.printer = printer
         self.params = {}
         self.autocut = autocut
+        self.autoclose = autoclose
 
 
     def set(self, **kwargs):
@@ -68,8 +69,7 @@ class EscposIO(object):
 
 
     def close(self):
-        if self.autocut:
-            self.printer.cut()
+        self.printer.close()
 
 
     def __enter__(self, **kwargs):
@@ -77,7 +77,12 @@ class EscposIO(object):
 
 
     def __exit__(self, type, value, traceback):
-        self.close()
+        if not (type is not None and issubclass(type, Exception)):
+            if self.autocut:
+                self.printer.cut()
+
+        if self.autoclose:
+            self.close()
 
 
 
@@ -261,7 +266,7 @@ class Escpos(object):
             raise TextError()
 
 
-    def set(self, align='left', codepage=None, **kwargs):
+    def set(self, codepage=None, **kwargs):
         """
         :type bold:         bool
         :param bold:        set bold font
@@ -281,6 +286,10 @@ class Escpos(object):
         :returns:            None
         """
 
+        for key in kwargs.iterkeys():
+            if not TEXT_STYLE.has_key(key):
+                raise KeyError('Parameter {0} is wrong.'.format(key))
+
         for key, value in TEXT_STYLE.iteritems():
             if kwargs.has_key(key):
                 cur = kwargs[key]
@@ -299,7 +308,7 @@ class Escpos(object):
         if codepage:
             self._raw(PAGE_CP_SET_COMMAND + chr(PAGE_CP_CODE[codepage]))
 
-    def cut(self, mode='', postfix="\n\n\n\n\n\n"):
+    def cut(self, mode='', postfix="\n\n\n\n\n"):
         """ Cut paper """
         # Fix the size between last line and cut
         # TODO: handle this with a line feed

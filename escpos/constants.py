@@ -56,7 +56,7 @@ TEXT_STYLE = {
         'normal': '\x1b\x21\x00',   # Normal text
         '2h': '\x1b\x21\x10',       # Double height text
         '2w': '\x1b\x21\x20',       # Double width text
-        '2x': '\x1b\x21\x30',     # Quad area text
+        '2x': '\x1b\x21\x30',       # Quad area text
     },
     'font': {
         'a': '\x1b\x4d\x00',        # Font type A
