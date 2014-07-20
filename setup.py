@@ -5,12 +5,13 @@ from distutils.core import setup
 setup(
     name='python-escpos',
     version='1.0.6',
-    url='http://code.google.com/p/python-escpos',
+    url='https://github.com/mosquito/python-escpos',
     download_url='https://github.com/mosquito/python-escpos/archive/master.zip',
     description='Python library to manipulate ESC/POS Printers',
+    long_description=open('README.rst').read(),
     license='GNU GPL v3',
-    author='Manuel F Martinez',
-    author_email='manpaz@bashlinux.com',
+    author=['Manuel F Martinez', 'Dmitry Orlov'],
+    author_email=['manpaz@bashlinux.com', 'me@mosquito.su'],
     platforms=['linux'],
     packages=[
         'escpos',
