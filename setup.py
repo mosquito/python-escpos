@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='python-escpos',
-    version='1.0.8',
+    version='1.0.9',
     url='https://github.com/mosquito/python-escpos',
     download_url='https://github.com/mosquito/python-escpos/archive/master.zip',
     description='Python library to manipulate ESC/POS Printers',
