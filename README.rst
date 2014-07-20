@@ -97,10 +97,43 @@ or use with statement:
         p.writelines(u'Привет', color=2)
         p.writelines(u'BIG TEXT', size='2x')
 
-    # after exit of with, printer cut paper
+    # After exit of with, printer will cut the paper
+
+5. API
+------
+
+* Escpos() - main class
+* Escpos.image(path_img) - Open image file
+* Escpos.qr(text, \*args, \*\*kwargs) - Print QR Code for the provided string
+* Escpos.barcode(code, bc, width, height, pos, font) - Print Barcode
+* Escpos.text(text) - Print any text
+* Escpos.set(codepage=None, \*\*kwargs) - kwargs should be:  
+    * bold:        set bold font
+    * underline:   underline text
+    * size:        Text size
+    * font:        Font type
+    * align:       Text position
+    * inverted:    White on black text
+    * color:       Text color
+    
+* Escpos.cut() - Cut the paper
+* Escpos.cashdraw(pin) - Send open cashdraw signal to printer pin.
+* Escpos.control() and Escpos.hw() - Should be use it when you want to do another operations.
+
+* EscposIO(printer, autocut=True, autoclose=True) - class for using with 'with' statement. When autocut=False printer not cut the paper after exit of "with".
+* EscposIO.set(\*\*kwargs) - set the params in printing stream
+    * bold:        set bold font
+    * underline:   underline text
+    * size:        Text size
+    * font:        Font type
+    * align:       Text position
+    * inverted:    White on black text
+    * color:       Text color
+* EscposIO.writelines(text, \*\*params) - Accept params like "set", and apply them for this lines. You should use set() for setting common params.
 
 
-5. Links
+
+6. Links
 --------
 
 Please visit project homepage at:
@@ -108,4 +141,3 @@ http://repo.bashlinux.com/projects/escpos.html
 
 * Manuel F Martinez <manpaz@bashlinux.com>
 * Dmitry Orlov <me@mosquito.su>
-
