@@ -9,7 +9,7 @@ setup(
     download_url='https://github.com/mosquito/python-escpos/archive/master.zip',
     description='Python library to manipulate ESC/POS Printers',
     long_description=open('README.rst').read(),
-    license='GNU GPL v3',
+    license='LGPL',
     author=['Manuel F Martinez', 'Dmitry Orlov'],
     author_email=['manpaz@bashlinux.com', 'me@mosquito.su'],
     platforms=['linux'],
