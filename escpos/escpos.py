@@ -304,8 +304,8 @@ class Escpos(object):
                     )
 
         # Codepage
-        self._codepage = codepage
         if codepage:
+            self._codepage = codepage
             self._raw(PAGE_CP_SET_COMMAND + chr(PAGE_CP_CODE[codepage]))
 
     def cut(self, mode='', postfix="\n\n\n\n\n"):
